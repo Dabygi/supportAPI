@@ -4,7 +4,7 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, Permi
 
 
 class UserManager(BaseUserManager):  # Специальный класс для создания новых пользователей
-    # Создаём метод для создания пользователя
+    # метод для создания пользователя
     def create_user(self, email, username, password, **extra_fields):
         if not email:
             raise ValueError('Вы не ввели Email')
@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):  # Специальный класс для 
         user.save()
         return user
 
-    # Делаем метод для создание суперпользователя
+    # метод для создание суперпользователя
     def create_superuser(self, email, username, password=None):
         if password is None:
             raise TypeError('Поле password не может быть пустым')
