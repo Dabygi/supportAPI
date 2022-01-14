@@ -1,6 +1,31 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin)
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
+
+
+class UserManager(BaseUserManager):  # Специальный класс для создания новых пользователей
+    # Создаём метод для создания пользователя
+    def create_user(self, email, username, password, **extra_fields):
+        if not email:
+            raise ValueError('Вы не ввели Email')
+        if not username:
+            raise ValueError('Вы не ввели Username')
+        user = self.model(email=self.normalize_email(email), username=username, **extra_fields)
+        user.is_staff = False
+        user.is_superuser = False
+        user.set_password(password)
+        user.save()
+        return user
+
+    # Делаем метод для создание суперпользователя
+    def create_superuser(self, email, username, password=None):
+        if password is None:
+            raise TypeError('Поле password не может быть пустым')
+        user = self.create_user(email, username, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -10,8 +35,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'email'  # константа - ИДЕНТИФИКАТОР ЛОГИНА
+    REQUIRED_FIELDS = ['username']  # обязательные поля для ВВОДА
+
+    objects = UserManager()
 
     def __str__(self):
         return f'{self.email} {self.username}'
