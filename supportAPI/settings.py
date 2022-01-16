@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'authentication.User' # Заменяю стандартную модель аутентификации
+AUTH_USER_MODEL = 'authorization.User' # Заменяю стандартную модель аутентификации
 
 # Application definition
 
@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'authorization.apps.AuthenticationConfig',
-    'tickets.apps.TaskmanagerConfig',
+    'authorization',
+    'tickets',
 ]
 
 MIDDLEWARE = [
