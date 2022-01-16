@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
+from django.core.validators import RegexValidator
 
 
 class UserManager(BaseUserManager):  # Специальный класс для создания новых пользователей
@@ -24,12 +25,19 @@ class UserManager(BaseUserManager):  # Специальный класс для 
         user = self.create_user(email, username, password)
         user.is_superuser = True
         user.is_staff = True
+
         user.save()
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=54, unique=True, db_index=True)
+    username = models.CharField(max_length=54, unique=True, db_index=True, validators=[RegexValidator(
+        regex=r'[^0-9a-zA-Z-_]',
+        message='Only use 0-9, a-Z-_',
+        code='invalid_username',
+        inverse_match=True,
+    )],
+                                )
     email = models.EmailField(max_length=254, unique=True, db_index=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
