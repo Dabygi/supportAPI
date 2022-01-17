@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from rest_framework import generics
+from tickets.serializers import TicketCreateSerializer
 
-# Create your views here.
+
+class TicketCreateView(generics.CreateAPIView):
+    serializer_class = TicketCreateSerializer
