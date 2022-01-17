@@ -28,7 +28,7 @@ class Subcategory(models.Model):
 
 class Ticket(models.Model):
     class TicketStatus(models.TextChoices):
-        new = 'new', _('NEW')
+        new = 'new', _('New')
         in_work = 'in_work', _('In_work')
         close = 'close', _('Close')
         error = 'error', _('Error')
@@ -43,7 +43,7 @@ class Ticket(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.id
+        return f'{self.id} {self.category} {self.ticket_status} {self.date_created}'
 
     class Meta:
         verbose_name = 'ticket'
