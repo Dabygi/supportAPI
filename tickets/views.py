@@ -1,12 +1,18 @@
-from tickets.models import Ticket
-from tickets.serializers import TicketCreateSerializer, TicketListSerializer, TicketDetailSerializer
+from tickets.models import Ticket, Comment
+from tickets.serializers import TicketCreateSerializer, TicketListSerializer, TicketDetailSerializer, \
+    CommentCreateSerializer
 from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework.response import Response
 
 
-class TicketCreateView(generics.CreateAPIView):
-    serializer_class = TicketCreateSerializer
+class TicketCreateView(APIView):
+    """Создать тикет"""
+
+    def post(self, request):
+        ticket = TicketCreateSerializer(data=request.data)
+        if ticket.is_valid():
+            ticket.save()
+            return Response(status=201)
 
 
 class TicketListView(APIView):
@@ -25,3 +31,15 @@ class TicketDetailView(APIView):
         tickets = Ticket.objects.get(id=pk)
         serializer = TicketDetailSerializer(tickets)
         return Response(serializer.data)
+
+
+class CommentCreateView(APIView):
+    """Добавление комментария"""
+
+    def post(self, request):
+        comment = CommentCreateSerializer(data=request.data)
+        if comment.is_valid():
+            comment.save()
+            return Response(status=201)
+
+

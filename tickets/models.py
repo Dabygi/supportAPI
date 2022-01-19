@@ -6,12 +6,12 @@ from django.utils.translation import gettext_lazy as _
 class TicketCategory(models.Model):
     category = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.category
+
     class Meta:
         verbose_name = 'ticketcategory'
         verbose_name_plural = 'ticketcategorys'
-
-    def __str__(self):
-        return self.category
 
 
 class Subcategory(models.Model):
@@ -50,16 +50,20 @@ class Ticket(models.Model):
         verbose_name_plural = 'tickets'
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     class Event(models.TextChoices):
         new_comment = 'new_comment', _('New_comment')
         wait_response = 'wait_response', _('Wait_response')
         transfer_responsible = 'transfer_responsible', _('Transfer_responsible')
 
     event = models.CharField(max_length=120, choices=Event.choices, default='new_comment')
-    text_comment = models.ForeignKey(Ticket, on_delete=models.CASCADE, null=True, blank=True)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
+    text_comment = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} {self.date_created}'
 
     class Meta:
         verbose_name = 'comment'
