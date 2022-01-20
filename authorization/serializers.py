@@ -16,8 +16,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         confirm_password = attrs.get('confirm_password')
 
         if password != confirm_password:
-            raise serializers.ValidationError({'password': 'Пароли не совпадают!!!',
-                                               'confirm_password': 'Пароли не совпадают!!!'})
+            raise serializers.ValidationError('Пароли не совпадают!!!')
         try:
             validators.validate_password(password=password)
         except exceptions.ValidationError as e:
