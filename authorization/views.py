@@ -1,10 +1,13 @@
 from rest_framework import generics, status
+from rest_framework import permissions
 from rest_framework.response import Response
 from authorization.serializers import RegisterSerializer
+from authorization.tasks import send_activation_email
 
 
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         user = request.data     # переменная хранит данные пользовательского запроса.
@@ -12,5 +15,9 @@ class RegisterView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user_data = serializer.data
+        print(dir(serializer))
+        print('___________________________________')
+        print(serializer.validated_data)
+        send_activation_email.delay(serializer.validated_data.get('email'))
 
         return Response(user_data, status=status.HTTP_201_CREATED)
