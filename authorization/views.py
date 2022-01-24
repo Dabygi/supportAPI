@@ -1,13 +1,11 @@
 import os
 import jwt
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 from authorization.models import User
 from authorization.serializers import RegisterSerializer, EmailVerificationSerializer
 from rest_framework import permissions
-from authorization.service import send
 from authorization.tasks import send_activation_email
 from rest_framework_simplejwt.tokens import RefreshToken
 
