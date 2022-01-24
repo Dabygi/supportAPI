@@ -22,12 +22,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api-auth/', include('rest_framework.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
 
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 
-    path('registration/', include('authorization.urls')),
+    path('authorization/', include('authorization.urls')),
 
     path('api/v1/', include('tickets.urls')),
 
