@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from tickets.models import Ticket
 from tickets.serializers import TicketCreateSerializer, TicketListSerializer, TicketDetailSerializer, \
@@ -11,7 +11,7 @@ class TicketCreateView(generics.CreateAPIView):
     """Создать тикет"""
 
     serializer_class = TicketCreateSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (AllowAny, IsAuthenticated,)
 
 
 class TicketListView(generics.ListAPIView):
