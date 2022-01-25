@@ -1,9 +1,7 @@
-from django.contrib.sites.shortcuts import get_current_site
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
+
 from tickets.models import Ticket
 from tickets.serializers import TicketCreateSerializer, TicketListSerializer, TicketDetailSerializer, \
     CommentCreateSerializer
