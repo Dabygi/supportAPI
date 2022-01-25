@@ -23,7 +23,12 @@ class TicketCreateView(APIView):
 class TicketListView(APIView):
     """Вывод полного списка тикетов"""
 
+    permission_classes = (AllowAny,)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category', 'subcategory', 'ticket_status']
+
     def get(self, request):
+        print(get_current_site(request).domain)
         tickets = Ticket.objects.all()
         serializer = TicketListSerializer(tickets, many=True)
         return Response(serializer.data)
