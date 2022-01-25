@@ -15,7 +15,7 @@ class RegisterView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        user = request.data     # переменная хранит данные пользовательского запроса.
+        user = request.data  # переменная хранит данные пользовательского запроса.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -32,19 +32,21 @@ class RegisterView(generics.GenericAPIView):
 
         return Response(user_data, status=status.HTTP_201_CREATED)
 
-    class VerifyEmail(views.APIView):
-        serializer_class = EmailVerificationSerializer
 
-        def get(self, request):
-            token = request.GET.get('token')
-            try:
-                payload = jwt.decode(token, os.getenv('SECRET_KEY', 'django-insecure-!(xcyuv&8-n9mf$pzmn+swk^rz=rxq2_zhtjoy_fl)0%6-8041'))
-                user = User.objects.get(id=payload['user_id'])
-                if not user.is_verified:
-                    user.is_verified = True
-                    user.save()
-                return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
-            except jwt.ExpiredSignatureError as identifier:
-                return Response({'error': "Activation Expired"}, status=status.HTTP_400_BAD_REQUEST)
-            except jwt.exceptions.DecodeError as decodeError:
-                return Response({'error': "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+class VerifyEmail(views.APIView):
+    serializer_class = EmailVerificationSerializer
+
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, os.getenv('SECRET_KEY',
+                                                  'django-insecure-!(xcyuv&8-n9mf$pzmn+swk^rz=rxq2_zhtjoy_fl)0%6-8041'))
+            user = User.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError as identifier:
+            return Response({'error': "Activation Expired"}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as decodeError:
+            return Response({'error': "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
