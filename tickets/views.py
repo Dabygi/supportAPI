@@ -31,7 +31,7 @@ class TicketDetailView(generics.RetrieveAPIView):
     """Вывод конкретного тикета"""
 
     serializer_class = TicketDetailSerializer
-    queryset = Ticket.objects.filter()
+    queryset = Ticket.objects.all()
 
 
 class CommentCreateView(generics.CreateAPIView):
