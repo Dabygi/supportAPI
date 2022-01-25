@@ -8,6 +8,7 @@ from authorization.serializers import RegisterSerializer, EmailVerificationSeria
 from rest_framework import permissions
 from authorization.tasks import send_activation_email
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 
 
 class RegisterView(generics.GenericAPIView):
@@ -27,7 +28,7 @@ class RegisterView(generics.GenericAPIView):
         email_subject = 'Verify your email'
         email_body = f"Hi {serializer.validated_data.get('username')}. Use link for verify your email." \
                      f"http://{current_site}/authentication/verify-email/?token={str(token)}"
-        send_activation_email.delay(email_subject, email_body, os.getenv('EMAIL_HOST_USER'),
+        send_activation_email.delay(email_subject, email_body, settings.EMAIL_HOST_USER,
                                     serializer.validated_data.get('email'))
 
         return Response(user_data, status=status.HTTP_201_CREATED)
@@ -39,8 +40,7 @@ class VerifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
-            payload = jwt.decode(token, os.getenv('SECRET_KEY',
-                                                  'django-insecure-!(xcyuv&8-n9mf$pzmn+swk^rz=rxq2_zhtjoy_fl)0%6-8041'))
+            payload = jwt.decode(token, settings.SECRET_KEY)
             user = User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified = True
