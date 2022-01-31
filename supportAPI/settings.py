@@ -158,7 +158,6 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7)  # default
 }
 
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -167,7 +166,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.getenv('SECRET_KEY'),
+    'SIGNING_KEY': os.getenv('SECRET_KEY', 'django-insecure-!(xcyuv&8-n9mf$pzmn+swk^rz=rxq2_zhtjoy_fl)0%6-8041'),
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
@@ -202,13 +201,11 @@ CKEDITOR_BASEPATH = "/assets/ckeditor/ckeditor/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 # SMPT
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = "dabygigrin@gmail.com"
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # добавить пароль
 EMAIL_PORT = 587
 
 # CELERY and REDIS

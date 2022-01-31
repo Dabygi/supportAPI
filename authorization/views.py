@@ -2,10 +2,12 @@ import os
 import jwt
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import generics, status, views
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from authorization.models import User
+from authorization.serializers import LoginSerializer
+from rest_framework.permissions import AllowAny
 from authorization.serializers import RegisterSerializer, EmailVerificationSerializer
-from rest_framework import permissions
 from authorization.tasks import send_activation_email
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
@@ -13,7 +15,7 @@ from django.conf import settings
 
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         user = request.data  # переменная хранит данные пользовательского запроса.
@@ -32,6 +34,22 @@ class RegisterView(generics.GenericAPIView):
                                     serializer.validated_data.get('email'))
 
         return Response(user_data, status=status.HTTP_201_CREATED)
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        user = get_object_or_404(User, email=request.data['email'])
+        token = str(RefreshToken.for_user(user).access_token)
+        return Response({'token': token}, status=status.HTTP_200_OK)
+
+
+class LogoutView(generics.GenericAPIView):
+    def get(self, request):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class VerifyEmail(views.APIView):
