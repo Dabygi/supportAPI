@@ -2,7 +2,7 @@ import json
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-from authorization.models import User
+from django.contrib.auth import get_user_model
 
 
 class UsersApiTestCase(APITestCase):
@@ -26,6 +26,7 @@ class UsersApiTestCase(APITestCase):
         self.assertEqual(3, len(response.data))
 
     def test_create_user(self):
+        User = get_user_model()
         user = User.objects.create_user(email='test_user@test.com', username='test_user', password='testuser1234',
                                         is_staff=False, is_superuser=False)
         self.assertTrue(user.is_active)
@@ -33,6 +34,7 @@ class UsersApiTestCase(APITestCase):
         self.assertFalse(user.is_superuser)
 
     def test_create_superuser(self):
+        User = get_user_model()
         admin_user = User.objects.create_superuser(email='test_superuser@test.com', username='super_user',
                                                    password='superuser',)
         self.assertTrue(admin_user.is_active)
