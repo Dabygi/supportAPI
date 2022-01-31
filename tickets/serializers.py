@@ -25,7 +25,7 @@ class TicketCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = '__all__'
+        exclude = ('author', 'responsible')
 
 
 class TicketListSerializer(serializers.ModelSerializer):
