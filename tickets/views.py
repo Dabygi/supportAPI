@@ -1,7 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 from tickets.models import Ticket
 from tickets.serializers import TicketCreateSerializer, TicketListSerializer, TicketDetailSerializer, \
     CommentCreateSerializer
