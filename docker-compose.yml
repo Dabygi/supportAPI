@@ -1,29 +1,10 @@
 version: '3.5'
 services:
 
-  nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile-nginx
-      network: host
-    container_name: support-nginx
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./media/:/code/media
-      - ./static/:/code/static
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - letsencrypt:/etc/letsencrypt
-    depends_on:
-      - web
-
-
   web:
     container_name: support-web
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn -b 0.0.0.0:8000 -w 5 config.wsgi"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn -b 0.0.0.0:8000 -w 5 supportAPI.wsgi"
     volumes:
       - .:/code
     ports:
