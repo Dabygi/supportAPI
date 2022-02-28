@@ -8,7 +8,7 @@ from celery import Celery
 
 # этот код скопирован с manage.py
 # он установит модуль настроек по умолчанию Django для приложения 'celery'.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'supportAPI.settings')
 
 # здесь мы меняем имя
 app = Celery("supportAPI")

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'authorization.apps.AuthorizationConfig',
     'tickets.apps.TicketsConfig',
+
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
@@ -168,7 +169,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': os.getenv('SECRET_KEY', 'django-insecure-!(xcyuv&8-n9mf$pzmn+swk^rz=rxq2_zhtjoy_fl)0%6-8041'),
+    'SIGNING_KEY': os.getenv('SECRET_KEY'),
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,

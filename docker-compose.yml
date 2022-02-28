@@ -1,6 +1,5 @@
 version: '3.5'
 services:
-
   web:
     container_name: support-web
     build: .
@@ -62,8 +61,6 @@ services:
       - web
       - celery
       - redis
-
-
 volumes:
   postgres_data:
   letsencrypt:
